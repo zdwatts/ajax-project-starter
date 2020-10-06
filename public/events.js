@@ -6,6 +6,7 @@ window.addEventListener('DOMContentLoaded',()=>{
             if(!res.ok){
                 throw res
             }
+            //debugger;
             return res.json();
         }).then(data => {
             console.log("data:", data);
@@ -13,9 +14,10 @@ window.addEventListener('DOMContentLoaded',()=>{
             pic.src = data.src;
         }).catch(err => {
             err.json().then(data => {
+                //debugger;
                 document.querySelector(".error").innerHTML = data.message;
             })
-            alert("Something went wrong! Please try again!")
+            //alert("Something went wrong! Please try again!")
         })
 
     document.getElementById("new-pic").addEventListener("click", () => {
@@ -36,7 +38,7 @@ window.addEventListener('DOMContentLoaded',()=>{
                 err.json().then(data => {
                     document.querySelector(".error").innerHTML = data.message;
                 })
-                alert("Something went wrong! Please try again!")
+                //alert("Something went wrong! Please try again!")
             })
     })
 
@@ -68,5 +70,34 @@ window.addEventListener('DOMContentLoaded',()=>{
         }).catch(err => {
             document.querySelector(".error").innerHTML = "Something went wrong"
         })
+    })
+
+    let form = document.querySelector(".comment-form");
+    form.addEventListener("submit", e => {
+        e.preventDefault()
+        let userComment = document.getElementById("user-comment");
+        fetch("/kitten/comments", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({"comment": userComment.value})
+        }).then(res => {
+            if(!res.ok){
+                throw res
+            }
+            return res.json();
+        }).then(data => {
+            let commentsDiv = document.querySelector(".comments")
+            console.log(data)
+            console.log(commentsDiv);
+            //let lastComment = data.comments.pop();
+            let lastStr = ""
+
+            data.comments.forEach(el => {
+                lastStr += `<div> ${el} <button class="delete">DELETE</button></div>`
+                console.log(lastStr);
+            })
+            commentsDiv.innerHTML = lastStr;
+        })
+
     })
 })
