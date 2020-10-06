@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded',()=>{
         }).catch(err => {
             err.json().then(data => {
                 //debugger;
-                document.querySelector(".error").innerHTML = data.message;
+                document.querySelector(".error").innerHTML = `${err.status}: ${data.message}`;
             })
             //alert("Something went wrong! Please try again!")
         })
